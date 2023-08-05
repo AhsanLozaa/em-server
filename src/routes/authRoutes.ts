@@ -1,7 +1,7 @@
 import express from 'express';
 import { logger } from '../utils/logger';
 import { signIn, signUp, test } from '../controllers/authController';
-import { validateAccessToken } from '../utils/authHandler';
+import { validateAccessToken } from '../utils/authMiddleware';
 
 const router = express.Router();
 

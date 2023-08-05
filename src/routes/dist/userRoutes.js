@@ -1,13 +1,11 @@
-import express from 'express';
-import authenticationMiddleware from '../utils/authMiddleware';
-
-const router = express.Router();
-
+"use strict";
+exports.__esModule = true;
+var express_1 = require("express");
+var router = express_1["default"].Router();
 router.post('/');
 // router.get('/', authenticationMiddleware, (req, res) => userController.getAllUsers(req, res));
 // router.get('/:id', authenticationMiddleware, (req, res) => userController.getUserById(req, res));
 // router.post('/', (req, res) => userController.createUser(req, res));
 // router.put('/:id', authenticationMiddleware, (req, res) => userController.updateUser(req, res));
 // router.delete('/:id', authenticationMiddleware, (req, res) => userController.deleteUser(req, res));
-
-export default router;
+exports["default"] = router;

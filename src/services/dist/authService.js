@@ -95,32 +95,16 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
-// export const login = async (authData: any) => {
-//   const { email, password } = authData;
-//   try {
-//     // Check if the user with the provided email exists
-//     const user = await User.findOne({ where: { email } });
-//     if (!user) {
-//       throw new Error('User not found');
-//     }
-//     // Compare the hashed password with the provided password
-//     const passwordMatch = await bcrypt.compare(password, user.password);
-//     if (!passwordMatch) {
-//       throw new Error('Invalid password');
-//     }
-//     const updatedUser = await createAndUpdateTokens(user);
-//     return updatedUser;
-//   } catch (error) {
-//     // Handle any errors that occurred during the authentication process
-//     throw new Error('Authentication failed');
-//   }
-// };
 exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, passwordMatch, updatedUser, error_1;
+    var email, password, roleToModelMap, user, passwordMatch, updatedUser, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 email = authData.email, password = authData.password;
+                roleToModelMap = {
+                    seller: seller_1["default"],
+                    buyer: buyers_1["default"]
+                };
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 5, , 6]);
