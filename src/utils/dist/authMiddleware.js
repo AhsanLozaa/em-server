@@ -41,7 +41,7 @@ var authUtils_1 = require("./authUtils");
 var users_1 = require("../db/models/users");
 // Middleware to validate access token and handle token refreshing
 exports.validateAccessToken = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var accessToken, refreshToken, _a, userId, email, error_1, _b, userId, email, newAccessToken_1, error_2;
+    var accessToken, refreshToken, _a, userId, email, role, error_1, _b, userId, email, role, newAccessToken_1, error_2;
     var _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -56,9 +56,10 @@ exports.validateAccessToken = function (req, res, next) { return __awaiter(void 
                 _d.trys.push([1, 3, , 8]);
                 return [4 /*yield*/, authUtils_1.verifyAccessToken(accessToken)];
             case 2:
-                _a = _d.sent(), userId = _a.userId, email = _a.email;
+                _a = _d.sent(), userId = _a.userId, email = _a.email, role = _a.role;
                 req.userId = userId;
                 req.email = email;
+                req.role = role;
                 // (req as any).userId = userId;
                 // (req as any).email = email;
                 next();
@@ -77,12 +78,13 @@ exports.validateAccessToken = function (req, res, next) { return __awaiter(void 
                 _d.trys.push([4, 6, , 7]);
                 return [4 /*yield*/, authUtils_1.verifyRefreshToken(refreshToken.toString())];
             case 5:
-                _b = _d.sent(), userId = _b.userId, email = _b.email;
+                _b = _d.sent(), userId = _b.userId, email = _b.email, role = _b.role;
                 // (req as any).userId = userId;
                 // (req as any).email = email;
                 req.userId = userId;
                 req.email = email;
-                newAccessToken_1 = authUtils_1.generateAccessToken(userId, email);
+                req.role = role;
+                newAccessToken_1 = authUtils_1.generateAccessToken(userId, email, role);
                 // Optionally, update the response with the new access token
                 res.set('Authorization', "Bearer " + newAccessToken_1);
                 // Update the user with the new tokens
@@ -118,7 +120,7 @@ exports.validateAccessToken = function (req, res, next) { return __awaiter(void 
 }); };
 // Middleware to validate refresh token
 exports.validateRefreshToken = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var refreshToken, _a, userId, email, error_3;
+    var refreshToken, _a, userId, email, role, error_3;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -131,11 +133,12 @@ exports.validateRefreshToken = function (req, res, next) { return __awaiter(void
                 _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, authUtils_1.verifyRefreshToken(refreshToken.toString())];
             case 2:
-                _a = _b.sent(), userId = _a.userId, email = _a.email;
+                _a = _b.sent(), userId = _a.userId, email = _a.email, role = _a.role;
                 // (req as any).userId = userId; // Adding 'userId' to the request object
                 // (req as any).email = email; // Adding 'email' to the request object
                 req.userId = userId;
                 req.email = email;
+                req.role = role;
                 next();
                 return [3 /*break*/, 4];
             case 3:

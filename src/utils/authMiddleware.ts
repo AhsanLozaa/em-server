@@ -13,6 +13,7 @@ declare global {
     interface Request {
       userId?: string;
       email?: string;
+      role?: string;
     }
   }
 }
@@ -32,9 +33,10 @@ export const validateAccessToken = async (
 
   try {
     // Verify the access token
-    const { userId, email } = await verifyAccessToken(accessToken);
+    const { userId, email, role } = await verifyAccessToken(accessToken);
     req.userId = userId;
     req.email = email;
+    req.role = role;
     // (req as any).userId = userId;
     // (req as any).email = email;
     next();
@@ -50,16 +52,17 @@ export const validateAccessToken = async (
 
     try {
       // Verify the refresh token
-      const { userId, email } = await verifyRefreshToken(
+      const { userId, email, role } = await verifyRefreshToken(
         refreshToken.toString(),
       );
       // (req as any).userId = userId;
       // (req as any).email = email;
       req.userId = userId;
       req.email = email;
+      req.role = role;
 
       // Generate a new access token
-      const newAccessToken = generateAccessToken(userId, email);
+      const newAccessToken = generateAccessToken(userId, email, role);
       // Optionally, update the response with the new access token
       res.set('Authorization', `Bearer ${newAccessToken}`);
 
@@ -98,11 +101,14 @@ export const validateRefreshToken = async (
   }
 
   try {
-    const { userId, email } = await verifyRefreshToken(refreshToken.toString());
+    const { userId, email, role } = await verifyRefreshToken(
+      refreshToken.toString(),
+    );
     // (req as any).userId = userId; // Adding 'userId' to the request object
     // (req as any).email = email; // Adding 'email' to the request object
     req.userId = userId;
     req.email = email;
+    req.role = role;
     next();
   } catch (error: any) {
     return res.status(401).json({ message: error.message });

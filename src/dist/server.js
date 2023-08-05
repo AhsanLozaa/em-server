@@ -37,8 +37,8 @@ sequelize.addModels([
     productOrders_1["default"],
 ]);
 sequelize
-    .sync()
-    // .sync({ alter: true })
+    // .sync()
+    .sync({ alter: true })
     .then(function () {
     console.log('Database connection has been established successfully.');
 })["catch"](function (error) {

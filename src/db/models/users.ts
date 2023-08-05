@@ -77,13 +77,13 @@ export default class User extends Model {
   password!: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(500),
     allowNull: true,
   })
   accessToken?: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(500),
     allowNull: true,
   })
   refreshToken?: string;

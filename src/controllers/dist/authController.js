@@ -103,7 +103,7 @@ exports.test = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
         try {
             res.status(200).json({
                 message: 'Test Successful',
-                error: "Testing Successful \u2705  (" + req.email + ")"
+                error: "Testing Successful \u2705  (" + req.email + ")  (" + req.role + ")"
             });
         }
         catch (error) {

@@ -42,8 +42,8 @@ sequelize.addModels([
   ProductOrder,
 ]);
 sequelize
-  .sync()
-  // .sync({ alter: true })
+  // .sync()
+  .sync({ alter: true })
   .then(() => {
     console.log('Database connection has been established successfully.');
   })

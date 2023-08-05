@@ -46,7 +46,7 @@ export default class Buyer extends Model {
   @ForeignKey(() => Address)
   @Column({
     type: DataType.UUID,
-    allowNull: false,
+    allowNull: true,
   })
   billingAddressId?: string;
 

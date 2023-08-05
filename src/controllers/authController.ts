@@ -43,7 +43,7 @@ export const test = async (req: Request, res: Response) => {
   try {
     res.status(200).json({
       message: 'Test Successful',
-      error: `Testing Successful ✅  (${req.email})`,
+      error: `Testing Successful ✅  (${req.email})  (${req.role})`,
     });
   } catch (error) {
     res
