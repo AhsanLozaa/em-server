@@ -7,6 +7,16 @@ import {
 } from './authUtils';
 import User from '../db/models/users';
 
+// Extend the Request object with custom properties
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: string;
+      email?: string;
+    }
+  }
+}
+
 // Middleware to validate access token and handle token refreshing
 export const validateAccessToken = async (
   req: Request,
@@ -23,8 +33,10 @@ export const validateAccessToken = async (
   try {
     // Verify the access token
     const { userId, email } = await verifyAccessToken(accessToken);
-    (req as any).userId = userId;
-    (req as any).email = email;
+    req.userId = userId;
+    req.email = email;
+    // (req as any).userId = userId;
+    // (req as any).email = email;
     next();
   } catch (error: any) {
     // Access token verification failed
@@ -41,8 +53,10 @@ export const validateAccessToken = async (
       const { userId, email } = await verifyRefreshToken(
         refreshToken.toString(),
       );
-      (req as any).userId = userId;
-      (req as any).email = email;
+      // (req as any).userId = userId;
+      // (req as any).email = email;
+      req.userId = userId;
+      req.email = email;
 
       // Generate a new access token
       const newAccessToken = generateAccessToken(userId, email);
@@ -85,8 +99,10 @@ export const validateRefreshToken = async (
 
   try {
     const { userId, email } = await verifyRefreshToken(refreshToken.toString());
-    (req as any).userId = userId; // Adding 'userId' to the request object
-    (req as any).email = email; // Adding 'email' to the request object
+    // (req as any).userId = userId; // Adding 'userId' to the request object
+    // (req as any).email = email; // Adding 'email' to the request object
+    req.userId = userId;
+    req.email = email;
     next();
   } catch (error: any) {
     return res.status(401).json({ message: error.message });

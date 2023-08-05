@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { registerBuyer } from '../services/buyerService';
 import { login, registerUser } from '../services/authService';
 import { CustomError } from '../utils/customError';
 
@@ -44,7 +43,7 @@ export const test = async (req: Request, res: Response) => {
   try {
     res.status(200).json({
       message: 'Test Successful',
-      error: 'Testing Successful ✅',
+      error: `Testing Successful ✅  (${req.email})`,
     });
   } catch (error) {
     res

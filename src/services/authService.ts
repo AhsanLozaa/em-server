@@ -62,6 +62,33 @@ export const registerUser = async (authData: any) => {
   return { message: 'Signup successful' };
 };
 
+// export const login = async (authData: any) => {
+//   const { email, password } = authData;
+
+//   try {
+//     // Check if the user with the provided email exists
+//     const user = await User.findOne({ where: { email } });
+
+//     if (!user) {
+//       throw new Error('User not found');
+//     }
+
+//     // Compare the hashed password with the provided password
+//     const passwordMatch = await bcrypt.compare(password, user.password);
+
+//     if (!passwordMatch) {
+//       throw new Error('Invalid password');
+//     }
+
+//     const updatedUser = await createAndUpdateTokens(user);
+
+//     return updatedUser;
+//   } catch (error) {
+//     // Handle any errors that occurred during the authentication process
+//     throw new Error('Authentication failed');
+//   }
+// };
+
 export const login = async (authData: any) => {
   const { email, password } = authData;
 
@@ -70,19 +97,28 @@ export const login = async (authData: any) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('Invalid email or password');
     }
 
     // Compare the hashed password with the provided password
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error('Invalid password');
+      throw new Error('Invalid email or password');
     }
 
+    // Generate new access and refresh tokens
     const updatedUser = await createAndUpdateTokens(user);
 
-    return updatedUser;
+    // Return only the required user information
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      accessToken: updatedUser.user.accessToken,
+      refreshToken: updatedUser.user.refreshToken,
+    };
   } catch (error) {
     // Handle any errors that occurred during the authentication process
     throw new Error('Authentication failed');

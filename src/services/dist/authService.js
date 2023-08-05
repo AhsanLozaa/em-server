@@ -36,19 +36,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.registerUser = void 0;
+exports.login = exports.registerUser = void 0;
 var buyers_1 = require("../db/models/buyers");
 var seller_1 = require("../db/models/seller");
 var users_1 = require("../db/models/users");
 var bcrypt_1 = require("bcrypt");
 var customError_1 = require("../utils/customError");
+var authUtils_1 = require("../utils/authUtils");
 // Service function to create a new buyer
 exports.registerUser = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, email, phoneNumber, password, role, existingEmailUser, existingPhoneUser, hashedPassword, newUser;
+    var name, email, phoneNumber, password, role, sellerRating, description, businessName, existingEmailUser, existingPhoneUser, hashedPassword, newUser;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                name = authData.name, email = authData.email, phoneNumber = authData.phoneNumber, password = authData.password, role = authData.role;
+                name = authData.name, email = authData.email, phoneNumber = authData.phoneNumber, password = authData.password, role = authData.role, sellerRating = authData.sellerRating, description = authData.description, businessName = authData.businessName;
                 return [4 /*yield*/, users_1["default"].findOne({ where: { email: email } })];
             case 1:
                 existingEmailUser = _a.sent();
@@ -75,7 +76,12 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
             case 4:
                 newUser = _a.sent();
                 if (!(role === 'seller')) return [3 /*break*/, 6];
-                return [4 /*yield*/, seller_1["default"].create({ userId: newUser.id })];
+                return [4 /*yield*/, seller_1["default"].create({
+                        userId: newUser.id,
+                        sellerRating: sellerRating,
+                        description: description,
+                        businessName: businessName
+                    })];
             case 5:
                 _a.sent();
                 return [3 /*break*/, 8];
@@ -86,6 +92,67 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
                 _a.sent();
                 _a.label = 8;
             case 8: return [2 /*return*/, { message: 'Signup successful' }];
+        }
+    });
+}); };
+// export const login = async (authData: any) => {
+//   const { email, password } = authData;
+//   try {
+//     // Check if the user with the provided email exists
+//     const user = await User.findOne({ where: { email } });
+//     if (!user) {
+//       throw new Error('User not found');
+//     }
+//     // Compare the hashed password with the provided password
+//     const passwordMatch = await bcrypt.compare(password, user.password);
+//     if (!passwordMatch) {
+//       throw new Error('Invalid password');
+//     }
+//     const updatedUser = await createAndUpdateTokens(user);
+//     return updatedUser;
+//   } catch (error) {
+//     // Handle any errors that occurred during the authentication process
+//     throw new Error('Authentication failed');
+//   }
+// };
+exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
+    var email, password, user, passwordMatch, updatedUser, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                email = authData.email, password = authData.password;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, users_1["default"].findOne({ where: { email: email } })];
+            case 2:
+                user = _a.sent();
+                if (!user) {
+                    throw new Error('Invalid email or password');
+                }
+                return [4 /*yield*/, bcrypt_1["default"].compare(password, user.password)];
+            case 3:
+                passwordMatch = _a.sent();
+                if (!passwordMatch) {
+                    throw new Error('Invalid email or password');
+                }
+                return [4 /*yield*/, authUtils_1.createAndUpdateTokens(user)];
+            case 4:
+                updatedUser = _a.sent();
+                // Return only the required user information
+                return [2 /*return*/, {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        profilePicture: user.profilePicture,
+                        accessToken: updatedUser.user.accessToken,
+                        refreshToken: updatedUser.user.refreshToken
+                    }];
+            case 5:
+                error_1 = _a.sent();
+                // Handle any errors that occurred during the authentication process
+                throw new Error('Authentication failed');
+            case 6: return [2 /*return*/];
         }
     });
 }); };
