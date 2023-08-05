@@ -52,14 +52,15 @@ var buyers_1 = require("../db/models/buyers");
 var seller_1 = require("../db/models/seller");
 var users_1 = require("../db/models/users");
 var bcrypt_1 = require("bcrypt");
-var customError_1 = require("../utils/customError");
 var authUtils_1 = require("../utils/authUtils");
+var customError_1 = require("../utils/customError");
 // Service function to create a new buyer
 exports.registerUser = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, email, phoneNumber, password, role, sellerRating, description, businessName, existingEmailUser, existingPhoneUser, hashedPassword, newUser;
+    var name, email, phoneNumber, password, role, sellerRating, description, businessName, existingEmailUser, existingPhoneUser, hashedPassword, newUser, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 9, , 10]);
                 name = authData.name, email = authData.email, phoneNumber = authData.phoneNumber, password = authData.password, role = authData.role, sellerRating = authData.sellerRating, description = authData.description, businessName = authData.businessName;
                 return [4 /*yield*/, users_1["default"].findOne({ where: { email: email } })];
             case 1:
@@ -70,7 +71,6 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, users_1["default"].findOne({ where: { phoneNumber: phoneNumber } })];
             case 2:
                 existingPhoneUser = _a.sent();
-                console.log(existingPhoneUser === null || existingPhoneUser === void 0 ? void 0 : existingPhoneUser.email);
                 if (existingPhoneUser) {
                     throw new customError_1.CustomError('Phone number already in use', 400);
                 }
@@ -103,11 +103,16 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
                 _a.sent();
                 _a.label = 8;
             case 8: return [2 /*return*/, { message: 'Signup successful' }];
+            case 9:
+                error_1 = _a.sent();
+                // throw new Error(error);
+                throw new customError_1.CustomError(error_1, 500);
+            case 10: return [2 /*return*/];
         }
     });
 }); };
 exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, userRoleData, buyer, seller, passwordMatch, updatedUser, error_1;
+    var email, password, user, userRoleData, buyer, seller, passwordMatch, updatedUser, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -159,8 +164,8 @@ exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, f
                         ? { buyer: userRoleData }
                         : { seller: userRoleData }))];
             case 9:
-                error_1 = _a.sent();
-                console.log(error_1);
+                error_2 = _a.sent();
+                console.log(error_2);
                 // Handle any errors that occurred during the authentication process
                 throw new Error('Authentication failed');
             case 10: return [2 /*return*/];

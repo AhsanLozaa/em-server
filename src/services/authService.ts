@@ -2,62 +2,66 @@ import Buyer from '../db/models/buyers';
 import Seller from '../db/models/seller';
 import User from '../db/models/users';
 import bcrypt from 'bcrypt';
-import { CustomError } from '../utils/customError';
 import { createAndUpdateTokens } from '../utils/authUtils';
+import { CustomError } from '../utils/customError';
 
 // Service function to create a new buyer
 export const registerUser = async (authData: any) => {
-  const {
-    name,
-    email,
-    phoneNumber,
-    password,
-    role,
-    sellerRating,
-    description,
-    businessName,
-  } = authData;
-
-  // Check if the email is already in use
-  const existingEmailUser = await User.findOne({ where: { email } });
-
-  if (existingEmailUser) {
-    throw new CustomError('Email already in use', 400);
-  }
-
-  // Check if the phone number is already in use
-  const existingPhoneUser = await User.findOne({ where: { phoneNumber } });
-  console.log(existingPhoneUser?.email);
-
-  if (existingPhoneUser) {
-    throw new CustomError('Phone number already in use', 400);
-  }
-
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Create a new user record
-  const newUser = await User.create({
-    name,
-    email,
-    phoneNumber,
-    role,
-    password: hashedPassword,
-  });
-
-  // Create a seller or buyer record based on the role
-  if (role === 'seller') {
-    await Seller.create({
-      userId: newUser.id,
+  try {
+    const {
+      name,
+      email,
+      phoneNumber,
+      password,
+      role,
       sellerRating,
       description,
       businessName,
-    });
-  } else if (role === 'buyer') {
-    await Buyer.create({ userId: newUser.id });
-  }
+    } = authData;
 
-  return { message: 'Signup successful' };
+    // Check if the email is already in use
+    const existingEmailUser = await User.findOne({ where: { email } });
+
+    if (existingEmailUser) {
+      throw new CustomError('Email already in use', 400);
+    }
+
+    // Check if the phone number is already in use
+    const existingPhoneUser = await User.findOne({ where: { phoneNumber } });
+
+    if (existingPhoneUser) {
+      throw new CustomError('Phone number already in use', 400);
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user record
+    const newUser = await User.create({
+      name,
+      email,
+      phoneNumber,
+      role,
+      password: hashedPassword,
+    });
+
+    // Create a seller or buyer record based on the role
+    if (role === 'seller') {
+      await Seller.create({
+        userId: newUser.id,
+        sellerRating,
+        description,
+        businessName,
+      });
+    } else if (role === 'buyer') {
+      await Buyer.create({ userId: newUser.id });
+    }
+
+    return { message: 'Signup successful' };
+  } catch (error: any) {
+    // throw new Error(error);
+    throw new CustomError(error, 500);
+  }
 };
 
 export const login = async (authData: any) => {

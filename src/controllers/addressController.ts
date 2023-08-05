@@ -1,7 +1,4 @@
 import { Request, Response } from 'express';
-import { login, registerUser } from '../services/authService';
-import { CustomError } from '../utils/customError';
-import Address from '../db/models/addresses';
 import { findAddressByUserId, saveAddress } from '../services/addressService';
 
 // Controller function to create a new buyer
