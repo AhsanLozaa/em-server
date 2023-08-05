@@ -16,6 +16,7 @@ import Order from './orders';
 import PaymentMethod from './paymentMethods';
 import BuyerPaymentMethods from './buyerPaymentMethods';
 import BuyerFavoriteProducts from './buyerFavouriteProducts';
+import User from './users';
 
 @Table({
   timestamps: false,
@@ -29,6 +30,14 @@ export default class Buyer extends Model {
     primaryKey: true,
   })
   id!: string;
+
+  // Define foreign key and association to the User model
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  userId!: string;
 
   // Define association to the Product model (assuming a many-to-many relationship)
   @BelongsToMany(() => Product, () => BuyerFavoriteProducts)

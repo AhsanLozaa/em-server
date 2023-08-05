@@ -5,7 +5,11 @@ import bcrypt from 'bcrypt';
 import validateRequestBody from '../utils/reqBodyValidator';
 import { userSchema } from '../validations/userSchema';
 import { CustomError } from '../utils/customError';
-import { createAndUpdateTokens, generateTokens } from '../utils/authUtils';
+import {
+  createAndUpdateTokens,
+  decodeAccessToken,
+  generateTokens,
+} from '../utils/authUtils';
 import { Op } from 'sequelize';
 
 // Service function to create a new buyer
@@ -76,7 +80,29 @@ export const login = async (authData: any) => {
     // Check if the user with the provided email exists
     const user = await User.findOne({ where: { email } });
 
-    if (!user) {
+    let userRoleData = null;
+
+    if (user) {
+      if (user.role === 'buyer') {
+        const buyer = await Buyer.findOne({
+          where: { userId: user.id },
+        });
+        if (buyer) {
+          userRoleData = buyer.toJSON();
+        }
+      }
+
+      if (user.role === 'seller') {
+        const seller = await Seller.findOne({
+          where: { userId: user.id },
+        });
+        if (seller) {
+          userRoleData = seller.toJSON();
+        }
+      }
+    }
+
+    if (!user || !userRoleData) {
       throw new Error('Invalid email or password');
     }
 
@@ -90,7 +116,7 @@ export const login = async (authData: any) => {
     // Generate new access and refresh tokens
     const updatedUser = await createAndUpdateTokens(user);
 
-    // Return only the required user information
+    // Return the user information along with buyerData or sellerData
     return {
       id: user.id,
       name: user.name,
@@ -98,8 +124,13 @@ export const login = async (authData: any) => {
       profilePicture: user.profilePicture,
       accessToken: updatedUser.user.accessToken,
       refreshToken: updatedUser.user.refreshToken,
+      ...(user.role === 'buyer'
+        ? { buyer: userRoleData }
+        : { seller: userRoleData }),
     };
   } catch (error) {
+    console.log(error);
+
     // Handle any errors that occurred during the authentication process
     throw new Error('Authentication failed');
   }

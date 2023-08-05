@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.verifyRefreshToken = exports.verifyAccessToken = exports.generateTokens = exports.updateTokens = exports.createAndUpdateTokens = exports.generateRefreshToken = exports.generateAccessToken = void 0;
+exports.decodeRefreshToken = exports.decodeAccessToken = exports.verifyRefreshToken = exports.verifyAccessToken = exports.generateTokens = exports.updateTokens = exports.createAndUpdateTokens = exports.generateRefreshToken = exports.generateAccessToken = void 0;
 var jsonwebtoken_1 = require("jsonwebtoken");
 var ACCESS_TOKEN_SECRET = 'POILKIKIJKK-121333-PPPOPOLFSdf';
 var REFRESH_TOKEN_SECRET = 'OOPIENFNFf-99912-FDASPFFSPPPp';
@@ -132,3 +132,37 @@ function verifyRefreshToken(refreshToken) {
     });
 }
 exports.verifyRefreshToken = verifyRefreshToken;
+// Function to decode the access token
+function decodeAccessToken(accessToken) {
+    try {
+        if (accessToken) {
+            var decoded = jsonwebtoken_1["default"].verify(accessToken, ACCESS_TOKEN_SECRET);
+            return decoded;
+        }
+        else {
+            return { userId: null, email: null, role: null };
+        }
+    }
+    catch (error) {
+        console.error('Error decoding access token:', error);
+        return { userId: null, email: null, role: null };
+    }
+}
+exports.decodeAccessToken = decodeAccessToken;
+// Function to decode the refresh token
+function decodeRefreshToken(refreshToken) {
+    try {
+        if (refreshToken) {
+            var decoded = jsonwebtoken_1["default"].verify(refreshToken, REFRESH_TOKEN_SECRET);
+            return decoded;
+        }
+        else {
+            return { userId: null, email: null, role: null };
+        }
+    }
+    catch (error) {
+        console.error('Error decoding refresh token:', error);
+        return { userId: null, email: null, role: null };
+    }
+}
+exports.decodeRefreshToken = decodeRefreshToken;

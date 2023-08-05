@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -96,7 +107,7 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, roleToModelMap, user, passwordMatch, updatedUser, error_1;
+    var email, password, roleToModelMap, user, userRoleData, buyer, seller, passwordMatch, updatedUser, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -107,36 +118,56 @@ exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, f
                 };
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 9, , 10]);
                 return [4 /*yield*/, users_1["default"].findOne({ where: { email: email } })];
             case 2:
                 user = _a.sent();
-                if (!user) {
+                userRoleData = null;
+                if (!user) return [3 /*break*/, 6];
+                if (!(user.role === 'buyer')) return [3 /*break*/, 4];
+                return [4 /*yield*/, buyers_1["default"].findOne({
+                        where: { userId: user.id }
+                    })];
+            case 3:
+                buyer = _a.sent();
+                if (buyer) {
+                    userRoleData = buyer.toJSON();
+                }
+                _a.label = 4;
+            case 4:
+                if (!(user.role === 'seller')) return [3 /*break*/, 6];
+                return [4 /*yield*/, seller_1["default"].findOne({
+                        where: { userId: user.id }
+                    })];
+            case 5:
+                seller = _a.sent();
+                if (seller) {
+                    userRoleData = seller.toJSON();
+                }
+                _a.label = 6;
+            case 6:
+                if (!user || !userRoleData) {
                     throw new Error('Invalid email or password');
                 }
                 return [4 /*yield*/, bcrypt_1["default"].compare(password, user.password)];
-            case 3:
+            case 7:
                 passwordMatch = _a.sent();
                 if (!passwordMatch) {
                     throw new Error('Invalid email or password');
                 }
                 return [4 /*yield*/, authUtils_1.createAndUpdateTokens(user)];
-            case 4:
+            case 8:
                 updatedUser = _a.sent();
-                // Return only the required user information
-                return [2 /*return*/, {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        profilePicture: user.profilePicture,
-                        accessToken: updatedUser.user.accessToken,
-                        refreshToken: updatedUser.user.refreshToken
-                    }];
-            case 5:
+                // Return the user information along with buyerData or sellerData
+                return [2 /*return*/, __assign({ id: user.id, name: user.name, email: user.email, profilePicture: user.profilePicture, accessToken: updatedUser.user.accessToken, refreshToken: updatedUser.user.refreshToken }, (user.role === 'buyer'
+                        ? { buyer: userRoleData }
+                        : { seller: userRoleData }))];
+            case 9:
                 error_1 = _a.sent();
+                console.log(error_1);
                 // Handle any errors that occurred during the authentication process
                 throw new Error('Authentication failed');
-            case 6: return [2 /*return*/];
+            case 10: return [2 /*return*/];
         }
     });
 }); };

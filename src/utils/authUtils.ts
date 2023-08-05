@@ -109,3 +109,49 @@ export function verifyRefreshToken(
     });
   });
 }
+
+// Function to decode the access token
+export function decodeAccessToken(accessToken: string | undefined): {
+  userId: string | null;
+  email: string | null;
+  role: string | null;
+} {
+  try {
+    if (accessToken) {
+      const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET) as {
+        userId: string;
+        email: string;
+        role: string;
+      };
+      return decoded;
+    } else {
+      return { userId: null, email: null, role: null };
+    }
+  } catch (error) {
+    console.error('Error decoding access token:', error);
+    return { userId: null, email: null, role: null };
+  }
+}
+
+// Function to decode the refresh token
+export function decodeRefreshToken(refreshToken: string | undefined): {
+  userId: string | null;
+  email: string | null;
+  role: string | null;
+} {
+  try {
+    if (refreshToken) {
+      const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET) as {
+        userId: string;
+        email: string;
+        role: string;
+      };
+      return decoded;
+    } else {
+      return { userId: null, email: null, role: null };
+    }
+  } catch (error) {
+    console.error('Error decoding refresh token:', error);
+    return { userId: null, email: null, role: null };
+  }
+}

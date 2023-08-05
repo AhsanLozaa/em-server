@@ -27,6 +27,7 @@ var orders_1 = require("./orders");
 var paymentMethods_1 = require("./paymentMethods");
 var buyerPaymentMethods_1 = require("./buyerPaymentMethods");
 var buyerFavouriteProducts_1 = require("./buyerFavouriteProducts");
+var users_1 = require("./users");
 var Buyer = /** @class */ (function (_super) {
     __extends(Buyer, _super);
     function Buyer() {
@@ -40,6 +41,13 @@ var Buyer = /** @class */ (function (_super) {
             primaryKey: true
         })
     ], Buyer.prototype, "id");
+    __decorate([
+        sequelize_typescript_1.ForeignKey(function () { return users_1["default"]; }),
+        sequelize_typescript_1.Column({
+            type: sequelize_typescript_1.DataType.UUID,
+            allowNull: false
+        })
+    ], Buyer.prototype, "userId");
     __decorate([
         sequelize_typescript_1.BelongsToMany(function () { return products_1["default"]; }, function () { return buyerFavouriteProducts_1["default"]; })
     ], Buyer.prototype, "favoriteProducts");
