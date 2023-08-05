@@ -4,6 +4,7 @@ import sellerRoutes from './routes/sellerRoutes';
 import buyerRoutes from './routes/buyerRoutes';
 import authRoutes from './routes/authRoutes';
 import addressRoutes from './routes/addressRoutes';
+import productsRoute from './routes/productRoutes';
 import { errorHandler } from './utils/errorHandler';
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';
@@ -58,6 +59,7 @@ app.use('/auth', authRoutes);
 app.use('/users/seller', sellerRoutes);
 app.use('/users/buyer', buyerRoutes);
 app.use('/address', addressRoutes);
+app.use('/product', productsRoute);
 app.use(errorHandler);
 
 app.listen(port, () => {

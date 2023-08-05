@@ -33,14 +33,14 @@ export default class User extends Model {
   })
   name!: string;
 
-  @Unique
+  // @Unique
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
   email!: string;
 
-  @Unique
+  // @Unique
   @Column({
     type: DataType.STRING,
     allowNull: false,

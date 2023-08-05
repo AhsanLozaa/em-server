@@ -19,13 +19,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-// models/user.model.ts
+// models/product.model.ts
 var sequelize_typescript_1 = require("sequelize-typescript");
 var uuid_1 = require("uuid");
-var addresses_1 = require("./addresses");
-var User = /** @class */ (function (_super) {
-    __extends(User, _super);
-    function User() {
+var seller_1 = require("./seller");
+var Product = /** @class */ (function (_super) {
+    __extends(Product, _super);
+    function Product() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
@@ -35,71 +35,56 @@ var User = /** @class */ (function (_super) {
             allowNull: false,
             primaryKey: true
         })
-    ], User.prototype, "id");
+    ], Product.prototype, "id");
     __decorate([
-        sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING,
-            allowNull: false
-        })
-    ], User.prototype, "name");
-    __decorate([
-        sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING,
-            allowNull: false
-        })
-    ], User.prototype, "email");
-    __decorate([
-        sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING,
-            allowNull: false
-        })
-    ], User.prototype, "phoneNumber");
-    __decorate([
-        sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING,
-            allowNull: true
-        })
-    ], User.prototype, "profilePicture");
-    __decorate([
-        sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING,
-            allowNull: false
-        })
-    ], User.prototype, "role");
-    __decorate([
-        sequelize_typescript_1.ForeignKey(function () { return addresses_1["default"]; }),
+        sequelize_typescript_1.ForeignKey(function () { return seller_1["default"]; }),
         sequelize_typescript_1.Column({
             type: sequelize_typescript_1.DataType.UUID,
-            allowNull: true
+            allowNull: false
         })
-    ], User.prototype, "addressId");
-    __decorate([
-        sequelize_typescript_1.BelongsTo(function () { return addresses_1["default"]; })
-    ], User.prototype, "address");
+    ], Product.prototype, "sellerId");
     __decorate([
         sequelize_typescript_1.Column({
             type: sequelize_typescript_1.DataType.STRING,
             allowNull: false
         })
-    ], User.prototype, "password");
+    ], Product.prototype, "name");
     __decorate([
         sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING(500),
-            allowNull: true
+            type: sequelize_typescript_1.DataType.STRING,
+            allowNull: false
         })
-    ], User.prototype, "accessToken");
+    ], Product.prototype, "description");
     __decorate([
         sequelize_typescript_1.Column({
-            type: sequelize_typescript_1.DataType.STRING(500),
-            allowNull: true
+            type: sequelize_typescript_1.DataType.INTEGER,
+            allowNull: false
         })
-    ], User.prototype, "refreshToken");
-    User = __decorate([
+    ], Product.prototype, "price");
+    __decorate([
+        sequelize_typescript_1.Column({
+            type: sequelize_typescript_1.DataType.INTEGER,
+            allowNull: false
+        })
+    ], Product.prototype, "stockQuantity");
+    __decorate([
+        sequelize_typescript_1.Column({
+            type: sequelize_typescript_1.DataType.STRING,
+            allowNull: false
+        })
+    ], Product.prototype, "image");
+    __decorate([
+        sequelize_typescript_1.Column({
+            type: sequelize_typescript_1.DataType.STRING,
+            allowNull: false
+        })
+    ], Product.prototype, "category");
+    Product = __decorate([
         sequelize_typescript_1.Table({
-            timestamps: true,
-            tableName: 'users'
+            timestamps: false,
+            tableName: 'products'
         })
-    ], User);
-    return User;
+    ], Product);
+    return Product;
 }(sequelize_typescript_1.Model));
-exports["default"] = User;
+exports["default"] = Product;

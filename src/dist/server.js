@@ -5,6 +5,7 @@ var sellerRoutes_1 = require("./routes/sellerRoutes");
 var buyerRoutes_1 = require("./routes/buyerRoutes");
 var authRoutes_1 = require("./routes/authRoutes");
 var addressRoutes_1 = require("./routes/addressRoutes");
+var productRoutes_1 = require("./routes/productRoutes");
 var errorHandler_1 = require("./utils/errorHandler");
 var dotenv_1 = require("dotenv");
 var sequelize_typescript_1 = require("sequelize-typescript");
@@ -50,6 +51,7 @@ app.use('/auth', authRoutes_1["default"]);
 app.use('/users/seller', sellerRoutes_1["default"]);
 app.use('/users/buyer', buyerRoutes_1["default"]);
 app.use('/address', addressRoutes_1["default"]);
+app.use('/product', productRoutes_1["default"]);
 app.use(errorHandler_1.errorHandler);
 app.listen(port, function () {
     console.log("Server is up and running on http://localhost:" + port);
