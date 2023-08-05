@@ -2,15 +2,8 @@ import Buyer from '../db/models/buyers';
 import Seller from '../db/models/seller';
 import User from '../db/models/users';
 import bcrypt from 'bcrypt';
-import validateRequestBody from '../utils/reqBodyValidator';
-import { userSchema } from '../validations/userSchema';
 import { CustomError } from '../utils/customError';
-import {
-  createAndUpdateTokens,
-  decodeAccessToken,
-  generateTokens,
-} from '../utils/authUtils';
-import { Op } from 'sequelize';
+import { createAndUpdateTokens } from '../utils/authUtils';
 
 // Service function to create a new buyer
 export const registerUser = async (authData: any) => {
@@ -69,12 +62,6 @@ export const registerUser = async (authData: any) => {
 
 export const login = async (authData: any) => {
   const { email, password } = authData;
-
-  // TODO move this out
-  const roleToModelMap = {
-    seller: Seller,
-    buyer: Buyer,
-  };
 
   try {
     // Check if the user with the provided email exists

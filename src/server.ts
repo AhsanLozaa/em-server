@@ -3,6 +3,7 @@ import userRoutes from './routes/userRoutes';
 import sellerRoutes from './routes/sellerRoutes';
 import buyerRoutes from './routes/buyerRoutes';
 import authRoutes from './routes/authRoutes';
+import addressRoutes from './routes/addressRoutes';
 import { errorHandler } from './utils/errorHandler';
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';
@@ -42,8 +43,8 @@ sequelize.addModels([
   ProductOrder,
 ]);
 sequelize
-  // .sync()
-  .sync({ alter: true })
+  .sync()
+  // .sync({ alter: true })
   .then(() => {
     console.log('Database connection has been established successfully.');
   })
@@ -56,6 +57,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/users/seller', sellerRoutes);
 app.use('/users/buyer', buyerRoutes);
+app.use('/address', addressRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => {

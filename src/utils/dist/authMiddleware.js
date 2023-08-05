@@ -36,12 +36,127 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.validateRefreshToken = exports.validateAccessToken = void 0;
+exports.validateRefreshToken = exports.validateAccessToken = exports.findAddressByUserId = exports.getUserAddress = void 0;
 var authUtils_1 = require("./authUtils");
 var users_1 = require("../db/models/users");
 // Middleware to validate access token and handle token refreshing
+// export const validateAccessToken = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   const accessToken = req.headers.authorization?.split(' ')[1];
+//   const refreshToken = req.headers['x-refresh-token'];
+//   if (!accessToken) {
+//     return res.status(401).json({ message: 'Access token not provided' });
+//   }
+//   try {
+//     // Verify the access token
+//     const { userId, email, role } = await verifyAccessToken(accessToken);
+//     req.userId = userId;
+//     req.email = email;
+//     req.role = role;
+//     // (req as any).userId = userId;
+//     // (req as any).email = email;
+//     next();
+//   } catch (error: any) {
+//     // Access token verification failed
+//     if (!refreshToken) {
+//       // Refresh token is not provided, or both tokens are expired
+//       return res
+//         .status(401)
+//         .json({ message: 'Access token expired. Please log in again.' });
+//     }
+//     try {
+//       // Verify the refresh token
+//       const { userId, email, role } = await verifyRefreshToken(
+//         refreshToken.toString(),
+//       );
+//       // (req as any).userId = userId;
+//       // (req as any).email = email;
+//       req.userId = userId;
+//       req.email = email;
+//       req.role = role;
+//       // Generate a new access token
+//       const newAccessToken = generateAccessToken(userId, email, role);
+//       // Optionally, update the response with the new access token
+//       res.set('Authorization', `Bearer ${newAccessToken}`);
+//       // Update the user with the new tokens
+//       // const user = /* Retrieve the user from the database using userId */;
+//       User.findByPk(userId).then(async (user) => {
+//         if (user) {
+//           await updateTokens(user, newAccessToken, refreshToken.toString());
+//         } else {
+//           return res
+//             .status(401)
+//             .json({ message: 'Access token expired. Please log in again.' });
+//         }
+//       });
+//       next();
+//     } catch (error: any) {
+//       // Refresh token verification failed
+//       return res.status(401).json({
+//         message: 'Refresh token expired or invalid. Please log in again.',
+//       });
+//     }
+//   }
+// };
+function getUserAddress(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var userId, address, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    userId = req.userId;
+                    return [4 /*yield*/, findAddressByUserId(userId)];
+                case 1:
+                    address = _a.sent();
+                    if (!address) {
+                        return [2 /*return*/, res.status(404).json({ message: 'Address not found' })];
+                    }
+                    res.status(200).json({
+                        address: address
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    console.error('Error finding address:', error_1);
+                    return [2 /*return*/, res.status(500).json({ message: 'Internal server error' })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getUserAddress = getUserAddress;
+// addressService.ts
+var addresses_1 = require("../db/models/addresses");
+function findAddressByUserId(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var address, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, addresses_1["default"].findOne({
+                            where: { userId: userId }
+                        })];
+                case 1:
+                    address = _a.sent();
+                    return [2 /*return*/, address];
+                case 2:
+                    error_2 = _a.sent();
+                    console.error('Error finding address:', error_2);
+                    throw error_2;
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.findAddressByUserId = findAddressByUserId;
+// validateAccessToken.ts
 exports.validateAccessToken = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var accessToken, refreshToken, _a, userId, email, role, error_1, _b, userId, email, role, newAccessToken_1, error_2;
+    var accessToken, refreshToken, _a, userId, email, role, error_3, _b, userId, email, role, newAccessToken, user, error_4;
     var _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -53,19 +168,17 @@ exports.validateAccessToken = function (req, res, next) { return __awaiter(void 
                 }
                 _d.label = 1;
             case 1:
-                _d.trys.push([1, 3, , 8]);
+                _d.trys.push([1, 3, , 12]);
                 return [4 /*yield*/, authUtils_1.verifyAccessToken(accessToken)];
             case 2:
                 _a = _d.sent(), userId = _a.userId, email = _a.email, role = _a.role;
                 req.userId = userId;
                 req.email = email;
                 req.role = role;
-                // (req as any).userId = userId;
-                // (req as any).email = email;
                 next();
-                return [3 /*break*/, 8];
+                return [3 /*break*/, 12];
             case 3:
-                error_1 = _d.sent();
+                error_3 = _d.sent();
                 // Access token verification failed
                 if (!refreshToken) {
                     // Refresh token is not provided, or both tokens are expired
@@ -75,52 +188,44 @@ exports.validateAccessToken = function (req, res, next) { return __awaiter(void 
                 }
                 _d.label = 4;
             case 4:
-                _d.trys.push([4, 6, , 7]);
+                _d.trys.push([4, 10, , 11]);
                 return [4 /*yield*/, authUtils_1.verifyRefreshToken(refreshToken.toString())];
             case 5:
                 _b = _d.sent(), userId = _b.userId, email = _b.email, role = _b.role;
-                // (req as any).userId = userId;
-                // (req as any).email = email;
                 req.userId = userId;
                 req.email = email;
                 req.role = role;
-                newAccessToken_1 = authUtils_1.generateAccessToken(userId, email, role);
+                newAccessToken = authUtils_1.generateAccessToken(userId, email, role);
                 // Optionally, update the response with the new access token
-                res.set('Authorization', "Bearer " + newAccessToken_1);
-                // Update the user with the new tokens
-                // const user = /* Retrieve the user from the database using userId */;
-                users_1["default"].findByPk(userId).then(function (user) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                if (!user) return [3 /*break*/, 2];
-                                return [4 /*yield*/, authUtils_1.updateTokens(user, newAccessToken_1, refreshToken.toString())];
-                            case 1:
-                                _a.sent();
-                                return [3 /*break*/, 3];
-                            case 2: return [2 /*return*/, res
-                                    .status(401)
-                                    .json({ message: 'Access token expired. Please log in again.' })];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); });
-                next();
-                return [3 /*break*/, 7];
+                res.set('Authorization', "Bearer " + newAccessToken);
+                return [4 /*yield*/, users_1["default"].findByPk(userId)];
             case 6:
-                error_2 = _d.sent();
+                user = _d.sent();
+                if (!user) return [3 /*break*/, 8];
+                return [4 /*yield*/, authUtils_1.updateTokens(user, newAccessToken, refreshToken.toString())];
+            case 7:
+                _d.sent();
+                return [3 /*break*/, 9];
+            case 8: return [2 /*return*/, res
+                    .status(401)
+                    .json({ message: 'Access token expired. Please log in again.' })];
+            case 9:
+                next();
+                return [3 /*break*/, 11];
+            case 10:
+                error_4 = _d.sent();
                 // Refresh token verification failed
                 return [2 /*return*/, res.status(401).json({
                         message: 'Refresh token expired or invalid. Please log in again.'
                     })];
-            case 7: return [3 /*break*/, 8];
-            case 8: return [2 /*return*/];
+            case 11: return [3 /*break*/, 12];
+            case 12: return [2 /*return*/];
         }
     });
 }); };
 // Middleware to validate refresh token
 exports.validateRefreshToken = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var refreshToken, _a, userId, email, role, error_3;
+    var refreshToken, _a, userId, email, role, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -142,8 +247,8 @@ exports.validateRefreshToken = function (req, res, next) { return __awaiter(void
                 next();
                 return [3 /*break*/, 4];
             case 3:
-                error_3 = _b.sent();
-                return [2 /*return*/, res.status(401).json({ message: error_3.message })];
+                error_5 = _b.sent();
+                return [2 /*return*/, res.status(401).json({ message: error_5.message })];
             case 4: return [2 /*return*/];
         }
     });

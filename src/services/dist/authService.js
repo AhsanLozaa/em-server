@@ -107,15 +107,11 @@ exports.registerUser = function (authData) { return __awaiter(void 0, void 0, vo
     });
 }); };
 exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, roleToModelMap, user, userRoleData, buyer, seller, passwordMatch, updatedUser, error_1;
+    var email, password, user, userRoleData, buyer, seller, passwordMatch, updatedUser, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 email = authData.email, password = authData.password;
-                roleToModelMap = {
-                    seller: seller_1["default"],
-                    buyer: buyers_1["default"]
-                };
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 9, , 10]);
