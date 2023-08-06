@@ -2,6 +2,8 @@ import { Op } from 'sequelize';
 import Seller from '../db/models/seller';
 import User from '../db/models/users';
 import Product from '../db/models/products';
+import seller from '../db/models/seller';
+import { CustomError } from '../utils/customError';
 
 export const createNewProduct = async (reqBodyData: any, userId: string) => {
   try {
@@ -63,6 +65,41 @@ export const fetchProductsBySellerId = async (
     };
   } catch (error) {
     // Handle error if necessary
+    throw error;
+  }
+};
+
+export const deleteProduct = async (productId: string, userId: string) => {
+  // ! only the product owner can delete a product
+
+  try {
+    // Fetch the product
+    const product: Product | null = await Product.findOne({
+      where: {
+        id: productId,
+        isDeleted: false,
+      },
+    });
+
+    if (product) {
+      // fetch the seller by userId
+      const seller: Seller | null = await Seller.findByPk(product.sellerId);
+
+      // check if the current user is the seller
+      if (seller?.userId === userId) {
+        product.isDeleted = true;
+        await product.save();
+        return { success: true };
+      } else {
+        throw new CustomError(
+          'You are not authorized to delete this product',
+          401,
+        );
+      }
+    } else {
+      throw new CustomError('Product not found', 404);
+    }
+  } catch (error) {
     throw error;
   }
 };

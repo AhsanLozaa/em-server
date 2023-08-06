@@ -65,4 +65,11 @@ export default class Product extends Model {
     allowNull: false,
   })
   category!: string;
+
+  @Default(false)
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+  })
+  isDeleted!: boolean;
 }

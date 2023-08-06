@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import { registerSeller } from '../services/sellerService';
 import Seller from '../db/models/seller';
-import { fetchProductsBySellerId } from '../services/productService';
+import {
+  deleteProduct,
+  fetchProductsBySellerId,
+} from '../services/productService';
+import { CustomError } from '../utils/customError';
 
 export const getProductsBySellerId = async (req: Request, res: Response) => {
   try {
@@ -46,5 +50,22 @@ export const createProduct = (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: 'Failed to create seller', error: error.message });
+  }
+};
+
+export const removeProduct = async (req: Request, res: Response) => {
+  try {
+    const data = await deleteProduct(req.params.productId, req.userId);
+    res.status(201).json(data);
+  } catch (error: any) {
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ message: 'Failed to delete product', error: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ message: 'Failed to delete product', error: error.message });
+    }
   }
 };

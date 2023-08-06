@@ -59,7 +59,7 @@ app.use('/auth', authRoutes);
 app.use('/users/seller', sellerRoutes);
 app.use('/users/buyer', buyerRoutes);
 app.use('/address', addressRoutes);
-app.use('/product', productsRoute);
+app.use('/products', productsRoute);
 app.use(errorHandler);
 
 app.listen(port, () => {

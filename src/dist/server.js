@@ -51,7 +51,7 @@ app.use('/auth', authRoutes_1["default"]);
 app.use('/users/seller', sellerRoutes_1["default"]);
 app.use('/users/buyer', buyerRoutes_1["default"]);
 app.use('/address', addressRoutes_1["default"]);
-app.use('/product', productRoutes_1["default"]);
+app.use('/products', productRoutes_1["default"]);
 app.use(errorHandler_1.errorHandler);
 app.listen(port, function () {
     console.log("Server is up and running on http://localhost:" + port);
