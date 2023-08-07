@@ -4,6 +4,34 @@ import User from '../db/models/users';
 import bcrypt from 'bcrypt';
 import { createAndUpdateTokens } from '../utils/authUtils';
 import { CustomError } from '../utils/customError';
+import { sendEmailConfirmation } from '../utils/email/authEmailHandler';
+import { generateOTP } from '../utils';
+
+// export const sendSignUPOtp = async (data: any) => {
+//   try {
+//     const { email } = data;
+
+//     const otp = generateOTP();
+//     const otpExpirationMinutes = 10;
+//     const expirationTime = new Date(Date.now() + otpExpirationMinutes * 60000);
+
+//     // Save the OTP to the user document in the MongoDB collection
+//     const updatedUser = await User.update(
+//       {
+//         signupOtp: otp,
+//         signupOtpExpiration: expirationTime,
+//       },
+//       {
+//         where: {
+//           email: email,
+//         },
+//         returning: true, // This is the equivalent of { new: true } in Mongoose
+//       },
+//     );
+
+//     await sendEmailConfirmation(email, '123456', 60);
+//   } catch (error) {}
+// };
 
 // Service function to create a new buyer
 export const registerUser = async (authData: any) => {

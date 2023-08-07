@@ -4,6 +4,7 @@ import User from '../db/models/users';
 import Product from '../db/models/products';
 import seller from '../db/models/seller';
 import { CustomError } from '../utils/customError';
+import { sendEmailConfirmation } from '../utils/email/authEmailHandler';
 
 export const createNewProduct = async (reqBodyData: any, userId: string) => {
   try {

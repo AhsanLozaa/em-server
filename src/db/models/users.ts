@@ -87,4 +87,16 @@ export default class User extends Model {
     allowNull: true,
   })
   refreshToken?: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  signupOtp?: number;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  signupOtpExpiration?: Date;
 }
