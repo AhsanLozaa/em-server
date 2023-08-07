@@ -143,6 +143,7 @@ export const login = async (authData: any) => {
       profilePicture: user.profilePicture,
       accessToken: updatedUser.user.accessToken,
       refreshToken: updatedUser.user.refreshToken,
+      role: updatedUser.user.role,
       ...(user.role === 'buyer'
         ? { buyer: userRoleData }
         : { seller: userRoleData }),

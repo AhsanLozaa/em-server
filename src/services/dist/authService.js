@@ -182,7 +182,7 @@ exports.login = function (authData) { return __awaiter(void 0, void 0, void 0, f
             case 8:
                 updatedUser = _a.sent();
                 // Return the user information along with buyerData or sellerData
-                return [2 /*return*/, __assign({ id: user.id, name: user.name, email: user.email, profilePicture: user.profilePicture, accessToken: updatedUser.user.accessToken, refreshToken: updatedUser.user.refreshToken }, (user.role === 'buyer'
+                return [2 /*return*/, __assign({ id: user.id, name: user.name, email: user.email, profilePicture: user.profilePicture, accessToken: updatedUser.user.accessToken, refreshToken: updatedUser.user.refreshToken, role: updatedUser.user.role }, (user.role === 'buyer'
                         ? { buyer: userRoleData }
                         : { seller: userRoleData }))];
             case 9:

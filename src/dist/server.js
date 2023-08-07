@@ -20,6 +20,7 @@ var orders_1 = require("./db/models/orders");
 var buyerPaymentMethods_1 = require("./db/models/buyerPaymentMethods");
 var paymentMethods_1 = require("./db/models/paymentMethods");
 var productOrders_1 = require("./db/models/productOrders");
+var cors_1 = require("cors");
 dotenv_1["default"].config();
 console.log(__dirname);
 var app = express_1["default"]();
@@ -46,6 +47,7 @@ sequelize
 })["catch"](function (error) {
     console.log('Err', error);
 });
+app.use(cors_1["default"]({ origin: '*' }));
 app.use(express_1["default"].json());
 app.use('/auth', authRoutes_1["default"]);
 app.use('/users/seller', sellerRoutes_1["default"]);

@@ -21,6 +21,7 @@ import Order from './db/models/orders';
 import BuyerPaymentMethods from './db/models/buyerPaymentMethods';
 import PaymentMethod from './db/models/paymentMethods';
 import ProductOrder from './db/models/productOrders';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ sequelize
     console.log('Err', error);
   });
 
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 app.use('/auth', authRoutes);

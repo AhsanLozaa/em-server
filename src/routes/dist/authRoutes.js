@@ -1,0 +1,17 @@
+"use strict";
+exports.__esModule = true;
+var express_1 = require("express");
+var logger_1 = require("../utils/logger");
+var authController_1 = require("../controllers/authController");
+var authMiddleware_1 = require("../utils/authMiddleware");
+var router = express_1["default"].Router();
+router.post('/signup', logger_1.logger, authController_1.signUp);
+router.post('/signin', logger_1.logger, authController_1.signIn);
+router.post('/test', logger_1.logger, authMiddleware_1.validateAccessToken, authController_1.test);
+router.post('/verify-token', logger_1.logger, authController_1.authenticateAccessToken);
+// router.get('/', authenticationMiddleware, (req, res) => userController.getAllUsers(req, res));
+// router.get('/:id', authenticationMiddleware, (req, res) => userController.getUserById(req, res));
+// router.post('/', (req, res) => userController.createUser(req, res));
+// router.put('/:id', authenticationMiddleware, (req, res) => userController.updateUser(req, res));
+// router.delete('/:id', authenticationMiddleware, (req, res) => userController.deleteUser(req, res));
+exports["default"] = router;

@@ -12,7 +12,7 @@ export function generateAccessToken(
   role: string,
 ): string {
   return jwt.sign({ userId, email, role }, ACCESS_TOKEN_SECRET, {
-    expiresIn: '15m',
+    expiresIn: '1h',
   }); // Token will expire in 15 minutes
 }
 
@@ -84,6 +84,35 @@ export function verifyAccessToken(
           role: string;
         };
         resolve({ userId, email, role });
+      }
+    });
+  });
+}
+
+export const simplyVerifyAccessToken = async (accessToken: string) => {
+  return true;
+};
+
+export function simp(
+  accessToken: string,
+): Promise<{ userId: string; email: string; role: string }> {
+  return new Promise((resolve, reject) => {
+    jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (error, decoded) => {
+      if (error) {
+        reject(new Error('Invalid access token'));
+      } else {
+        // Extract the userId and email from the decoded token
+        const { userId, email, role } = decoded as {
+          userId: string;
+          email: string;
+          role: string;
+        };
+
+        if (userId && email && role) {
+          return true;
+        } else {
+          return false;
+        }
       }
     });
   });
