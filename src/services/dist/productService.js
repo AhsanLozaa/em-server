@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.deleteProduct = exports.fetchProductsBySellerId = exports.createNewProduct = void 0;
+exports.fetchAllProductsByPagination = exports.deleteProduct = exports.fetchProductsBySellerId = exports.createNewProduct = void 0;
 var seller_1 = require("../db/models/seller");
 var products_1 = require("../db/models/products");
 var customError_1 = require("../utils/customError");
@@ -147,3 +147,42 @@ exports.deleteProduct = function (productId, userId) { return __awaiter(void 0, 
         }
     });
 }); };
+exports.fetchAllProductsByPagination = function (page, pageSize) {
+    if (page === void 0) { page = 1; }
+    if (pageSize === void 0) { pageSize = 10; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var offset, _a, count, rows, totalPages, hasNextPage, hasPreviousPage, error_4;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    offset = (page - 1) * pageSize;
+                    return [4 /*yield*/, products_1["default"].findAndCountAll({
+                            offset: offset,
+                            limit: pageSize
+                        })];
+                case 1:
+                    _a = _b.sent(), count = _a.count, rows = _a.rows;
+                    totalPages = Math.ceil(count / pageSize);
+                    hasNextPage = page < totalPages;
+                    hasPreviousPage = page > 1;
+                    return [2 /*return*/, {
+                            products: rows,
+                            pagination: {
+                                currentPage: page,
+                                pageSize: pageSize,
+                                totalItems: count,
+                                totalPages: totalPages,
+                                hasNextPage: hasNextPage,
+                                hasPreviousPage: hasPreviousPage
+                            }
+                        }];
+                case 2:
+                    error_4 = _b.sent();
+                    // Handle error if necessary
+                    throw error_4;
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+};

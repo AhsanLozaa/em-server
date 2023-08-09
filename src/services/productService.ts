@@ -104,3 +104,35 @@ export const deleteProduct = async (productId: string, userId: string) => {
     throw error;
   }
 };
+
+export const fetchAllProductsByPagination = async (
+  page: number = 1,
+  pageSize: number = 10,
+) => {
+  try {
+    const offset = (page - 1) * pageSize;
+    const { count, rows } = await Product.findAndCountAll({
+      offset,
+      limit: pageSize,
+    });
+
+    const totalPages = Math.ceil(count / pageSize);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return {
+      products: rows,
+      pagination: {
+        currentPage: page,
+        pageSize,
+        totalItems: count,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+  } catch (error) {
+    // Handle error if necessary
+    throw error;
+  }
+};

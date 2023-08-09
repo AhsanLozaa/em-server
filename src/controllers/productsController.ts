@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { registerSeller } from '../services/sellerService';
 import Seller from '../db/models/seller';
 import {
   deleteProduct,
+  fetchAllProductsByPagination,
   fetchProductsBySellerId,
 } from '../services/productService';
 import { CustomError } from '../utils/customError';
@@ -17,7 +17,24 @@ export const getProductsBySellerId = async (req: Request, res: Response) => {
       data = await fetchProductsBySellerId(sellerId.toString(), +page, +limit);
     }
 
-    // const newSeller = registerSeller(user, address, seller);
+    res.status(201).json(data);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: 'Failed to create seller', error: error.message });
+  }
+};
+
+export const getAllProductsByPagination = async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    let data = {};
+
+    data = await fetchAllProductsByPagination(+page, +limit);
+
     res.status(201).json(data);
   } catch (error: any) {
     res
@@ -41,10 +58,6 @@ export const getProductsBySellerId = async (req: Request, res: Response) => {
 export const createProduct = (req: Request, res: Response) => {
   try {
     const userId = req.userId;
-
-    // const  sellerData = new Seller(req.body);
-
-    // const newSeller = registerSeller(user, address, seller);
     res.status(201).json({});
   } catch (error: any) {
     res

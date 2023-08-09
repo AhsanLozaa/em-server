@@ -1,34 +1,31 @@
 // Service function to create a new seller
-// export const registerSeller = async (sellerData: Seller): Promise<Seller> => {
 
-import Address from '../db/models/addresses';
 import Seller from '../db/models/seller';
-import User from '../db/models/users';
 
-// export const registerSeller = async (userData: User, addressData: Address, sellerData: Seller): Promise<Seller> => {
-export const registerSeller = async (reqBodyData: any) => {
+export const fetchSellers = async (page: number = 1, pageSize: number = 10) => {
   try {
-    const user: User | null = await User.findByPk(reqBodyData.id);
+    const offset = (page - 1) * pageSize;
+    const { count, rows } = await Seller.findAndCountAll({
+      offset,
+      limit: pageSize,
+    });
 
-    // const user: User | null = await User.findOne({
-    //   where: {
-    //     email: userData.email,
-    //   },
-    // });
+    const totalPages = Math.ceil(count / pageSize);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
 
-    // if (!user) {
-    //   // If user is not found, create a new user with the sellerData
-    //   await User.create({
-    //     ...sellerData
-    //   });
-    // }
-    return null;
+    return {
+      sellers: rows,
+      pagination: {
+        currentPage: page,
+        pageSize,
+        totalItems: count,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
   } catch (error) {
-    // Handle error if necessary
     throw error;
   }
-
-  // return sellerData;
 };
-
-// Add more service functions for updating, deleting, and retrieving sellers
