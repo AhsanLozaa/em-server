@@ -7,4 +7,5 @@ var authMiddleware_1 = require("../utils/authMiddleware");
 var router = express_1["default"].Router();
 // router.post('/', logger, validateRequestBody(parentSchema), createSeller);
 router.get('/', logger_1.logger, authMiddleware_1.validateAccessToken, sellerController_1.fetchAllSellersByPagination);
+router.get('/:sellerId', logger_1.logger, authMiddleware_1.validateAccessToken, sellerController_1.getchSellerBySellerId);
 exports["default"] = router;

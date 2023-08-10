@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.fetchAllSellersByPagination = exports.createSeller = void 0;
+exports.getchSellerBySellerId = exports.fetchAllSellersByPagination = exports.createSeller = void 0;
 var sellerService_1 = require("../services/sellerService");
 // Controller function to create a new seller
 exports.createSeller = function (req, res) {
@@ -63,13 +63,35 @@ exports.fetchAllSellersByPagination = function (req, res) { return __awaiter(voi
                 return [4 /*yield*/, sellerService_1.fetchSellers(+page, +limit)];
             case 1:
                 data = _d.sent();
-                res.status(201).json(data);
+                res.status(200).json(data);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _d.sent();
                 res
                     .status(500)
                     .json({ message: 'Failed to fetch sellers', error: error_1.message });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getchSellerBySellerId = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var sellerId, data, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                sellerId = req.params.sellerId;
+                return [4 /*yield*/, sellerService_1.fetchSellerById(sellerId)];
+            case 1:
+                data = _a.sent();
+                res.status(200).json(data);
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                res
+                    .status(500)
+                    .json({ message: 'Failed to fetch seller', error: error_2.message });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }

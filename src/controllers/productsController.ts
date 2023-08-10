@@ -9,7 +9,8 @@ import { CustomError } from '../utils/customError';
 
 export const getProductsBySellerId = async (req: Request, res: Response) => {
   try {
-    const { sellerId, page = 1, limit = 10 } = req.body;
+    const { sellerId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
     let data = {};
 
     if (sellerId) {

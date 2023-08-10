@@ -40,12 +40,13 @@ exports.removeProduct = exports.createProduct = exports.getAllProductsByPaginati
 var productService_1 = require("../services/productService");
 var customError_1 = require("../utils/customError");
 exports.getProductsBySellerId = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, sellerId, _b, page, _c, limit, data, error_1;
+    var sellerId, _a, _b, page, _c, limit, data, error_1;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
                 _d.trys.push([0, 3, , 4]);
-                _a = req.body, sellerId = _a.sellerId, _b = _a.page, page = _b === void 0 ? 1 : _b, _c = _a.limit, limit = _c === void 0 ? 10 : _c;
+                sellerId = req.params.sellerId;
+                _a = req.query, _b = _a.page, page = _b === void 0 ? 1 : _b, _c = _a.limit, limit = _c === void 0 ? 10 : _c;
                 data = {};
                 if (!sellerId) return [3 /*break*/, 2];
                 return [4 /*yield*/, productService_1.fetchProductsBySellerId(sellerId.toString(), +page, +limit)];

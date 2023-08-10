@@ -29,3 +29,17 @@ export const fetchSellers = async (page: number = 1, pageSize: number = 10) => {
     throw error;
   }
 };
+
+export const fetchSellerById = async (sellerId: string) => {
+  try {
+    const seller = await Seller.findByPk(sellerId);
+
+    if (!seller) {
+      throw new Error(`Seller with ID ${sellerId} not found.`);
+    }
+
+    return seller;
+  } catch (error) {
+    throw error;
+  }
+};

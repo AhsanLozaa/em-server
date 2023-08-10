@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', logger, validateAccessToken, getProductsBySellerId);
+router.get('/:sellerId', logger, validateAccessToken, getProductsBySellerId);
 router.delete('/:productId', logger, validateAccessToken, removeProduct);
 router.get('/all', logger, validateAccessToken, getAllProductsByPagination);
 

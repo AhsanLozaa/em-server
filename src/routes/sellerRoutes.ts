@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createSeller,
   fetchAllSellersByPagination,
+  getchSellerBySellerId,
 } from '../controllers/sellerController';
 import validateRequestBody from '../utils/reqBodyValidator';
 import { parentSchema, userSchema } from '../validations/userSchema';
@@ -12,5 +13,6 @@ const router = express.Router();
 
 // router.post('/', logger, validateRequestBody(parentSchema), createSeller);
 router.get('/', logger, validateAccessToken, fetchAllSellersByPagination);
+router.get('/:sellerId', logger, validateAccessToken, getchSellerBySellerId);
 
 export default router;

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.fetchSellers = void 0;
+exports.fetchSellerById = exports.fetchSellers = void 0;
 var seller_1 = require("../db/models/seller");
 exports.fetchSellers = function (page, pageSize) {
     if (page === void 0) { page = 1; }
@@ -77,3 +77,23 @@ exports.fetchSellers = function (page, pageSize) {
         });
     });
 };
+exports.fetchSellerById = function (sellerId) { return __awaiter(void 0, void 0, void 0, function () {
+    var seller, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, seller_1["default"].findByPk(sellerId)];
+            case 1:
+                seller = _a.sent();
+                if (!seller) {
+                    throw new Error("Seller with ID " + sellerId + " not found.");
+                }
+                return [2 /*return*/, seller];
+            case 2:
+                error_2 = _a.sent();
+                throw error_2;
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
